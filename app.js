@@ -4,6 +4,8 @@ const connectDb = require("./database");
 const passport = require("passport");
 const path = require("path");
 
+const profileRoutes = require("./api/profiles/profiles.routes");
+
 const cors = require("cors");
 const app = express();
 
@@ -13,6 +15,9 @@ app.use(passport.initialize());
 
 app.use(express.json());
 app.use(cors());
+
+app.use("/api/profile", profileRoutes);
+
 app.use((req, res, next) => {
   const err = new Error("Not Found");
   err.status = 404;
