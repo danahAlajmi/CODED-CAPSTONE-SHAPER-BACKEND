@@ -23,6 +23,24 @@ exports.getTrainers = async (req, res, next) => {
   }
 };
 
+exports.signin = async (req, res) => {
+  try {
+    const foundUser = await User.findById(req.user._id);
+    const payload = {
+      _id: foundUser._id,
+      username: foundUser.username,
+      email: foundUser.email,
+      isTrainer: foundUser.isTrainer,
+      profile: foundUser.profile,
+    };
+    const token = jwt.sign(payload, process.env.JWT_SECRET);
+
+    res.json({ token: token });
+  } catch (err) {
+    res.status(500).json("Server Error");
+  }
+};
+
 exports.signup = async (req, res) => {
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -31,7 +49,11 @@ exports.signup = async (req, res) => {
     const payload = {
       _id: newUser._id,
       username: newUser.username,
+      email: newUser.email,
+      isTrainer: newUser.isTrainer,
+      profile: newUser.profile,
     };
+
     const token = jwt.sign(payload, process.env.JWT_SECRET);
 
     const newProfile = await Profile.create({ user: newUser._id });
