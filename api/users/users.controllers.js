@@ -14,6 +14,15 @@ exports.getUsers = async (req, res, next) => {
   }
 };
 
+exports.getTrainers = async (req, res, next) => {
+  try {
+    const trainers = await User.find({ isTrainer: true }).populate("profile");
+    res.json(trainers);
+  } catch (err) {
+    next(err);
+  }
+};
+
 exports.signup = async (req, res) => {
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
