@@ -8,7 +8,7 @@ exports.fetchProfile = async (profileId, next) => {
     next(error);
   }
 };
-exports.profileUpdate = async (req, res) => {
+exports.updateProfile = async (req, res) => {
   try {
     const updateProfile = await Profile.findByIdAndUpdate(
       req.profile.id,
@@ -22,7 +22,7 @@ exports.profileUpdate = async (req, res) => {
   }
 };
 
-exports.profilesGet = async (req, res) => {
+exports.getProfiles = async (req, res) => {
   try {
     const profiles = await Profile.find();
     res.json(profiles);

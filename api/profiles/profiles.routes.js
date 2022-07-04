@@ -3,8 +3,8 @@ const router = express.Router();
 
 const {
   fetchProfile,
-  profileUpdate,
-  profilesGet,
+  updateProfile,
+  getProfiles,
 } = require("./profiles.controllers");
 
 router.param("profileId", async (req, res, next, profileId) => {
@@ -19,7 +19,7 @@ router.param("profileId", async (req, res, next, profileId) => {
   }
 });
 
-router.get("/", profilesGet);
-router.put("/:profileId", profileUpdate);
+router.get("/", getProfiles);
+router.put("/:profileId", updateProfile);
 
 module.exports = router;

@@ -1,22 +1,22 @@
 const express = require("express");
 const connectDb = require("./database");
-
 const passport = require("passport");
 const path = require("path");
-
-const profileRoutes = require("./api/profiles/profiles.routes");
-
 const cors = require("cors");
-const app = express();
+const userRoutes = require("./api/users/users.routes");
+const profileRoutes = require("./api/profiles/profiles.routes");
+const sessionRoutes = require("./api/sessions/sessions.routes");
 
 connectDb();
+const app = express();
 
 app.use(passport.initialize());
-
 app.use(express.json());
 app.use(cors());
 
+app.use("/api/users", userRoutes);
 app.use("/api/profile", profileRoutes);
+app.use("/api/sessions", sessionRoutes);
 
 app.use((req, res, next) => {
   const err = new Error("Not Found");
@@ -32,6 +32,7 @@ app.use((err, req, res, next) => {
     },
   });
 });
+
 app.listen(8090, () => {
   console.log("The application is running on localhost:8090");
 });
