@@ -1,6 +1,7 @@
 const express = require("express");
 const connectDb = require("./database");
 const passport = require("passport");
+const { localStrategy, jwtStrategy } = require("./middleware/passport");
 const path = require("path");
 const cors = require("cors");
 const userRoutes = require("./api/users/users.routes");
@@ -11,6 +12,8 @@ connectDb();
 const app = express();
 
 app.use(passport.initialize());
+passport.use(localStrategy);
+passport.use(jwtStrategy);
 app.use(express.json());
 app.use(cors());
 
