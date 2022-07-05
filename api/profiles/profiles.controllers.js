@@ -37,7 +37,7 @@ exports.uploadImage = async (req, res, next) => {
   const link = "./media/image" + date + ".png";
   req.pipe(fs.createWriteStream(link));
   const imageLink =
-    "http://" + process.env.IP + ":8090/media/image" + date + ".png";
+    "http://192.168.100.151:8090/media/image" + date + ".png";
 
   res.status(200).send(imageLink);
 };
