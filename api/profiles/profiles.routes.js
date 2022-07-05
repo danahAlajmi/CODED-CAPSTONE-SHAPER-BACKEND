@@ -5,6 +5,7 @@ const {
   fetchProfile,
   updateProfile,
   getProfiles,
+  uploadImage,
 } = require("./profiles.controllers");
 
 router.param("profileId", async (req, res, next, profileId) => {
@@ -18,6 +19,7 @@ router.param("profileId", async (req, res, next, profileId) => {
     next(err);
   }
 });
+router.post("/image-upload",uploadImage)
 
 router.get("/", getProfiles);
 router.put("/:profileId", updateProfile);
