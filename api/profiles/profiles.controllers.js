@@ -1,3 +1,5 @@
+require("dotenv").config();
+const fs = require("fs");
 const Profile = require("../../models/Profile");
 
 exports.fetchProfile = async (profileId, next) => {
@@ -29,4 +31,12 @@ exports.getProfiles = async (req, res) => {
   } catch (err) {
     res.status(500).json("Server Error");
   }
+};
+exports.uploadImage = async (req, res, next) => {
+  const date = Date.now();
+  const link = "./media/image" + date + ".png";
+  req.pipe(fs.createWriteStream(link));
+  const imageLink = "http://"+process.env.IP+":8090/media/image" + date + ".png";
+
+  res.status(200).send(imageLink);
 };
