@@ -31,3 +31,22 @@ exports.createSession = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.joinSession = async (req, res, next) => {
+  const { userId } = req.params;
+  try {
+    await User.findByIdAndUpdate(userId, {
+      $push: { enrolled: req.session.id },
+      new: true,
+    });
+    const updatedSession = await Session.findByIdAndUpdate(req.session.id, {
+      $push: { participants: userId },
+      new: true,
+    });
+    res.status(200).json(updatedSession);
+  } catch (error) {
+    next(error);
+  }
+};
+// session id 62c302925b49abb902fc776e
+// user id 62c44c7cc5d2f07a6ba7088a
