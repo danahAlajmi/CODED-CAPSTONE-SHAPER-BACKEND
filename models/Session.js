@@ -12,7 +12,7 @@ const SessionSchema = new mongoose.Schema({
 
   date: { type: Number, required: true },
 
-  location: { type: String, required: true },
+  location: { type: String },
   duration: { type: Number, required: true },
   limit: { type: Number, required: true },
 
