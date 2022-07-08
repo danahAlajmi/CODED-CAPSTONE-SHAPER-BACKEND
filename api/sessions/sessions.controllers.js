@@ -32,6 +32,34 @@ exports.createSession = async (req, res, next) => {
   }
 };
 
+exports.updateSession = async (req, res, next) => {
+  try {
+    const { sessionId } = req.params;
+    const newSession = await Session.findByIdAndUpdate(sessionId, req.body);
+    res.json(newSession);
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.deleteSession = async (req, res, next) => {
+  const { sessionId } = req.params;
+  try {
+    const foundSession = await Session.findById(sessionId);
+    if (foundSession) {
+      await foundSession.remove();
+      await User.findByIdAndUpdate(foundSession.trainer, {
+        $pull: { owner: foundSession._id },
+      });
+      res.status(204).end();
+    } else {
+      next();
+    }
+  } catch (error) {
+    next(error);
+  }
+}
+
 exports.joinSession = async (req, res, next) => {
   const { userId } = req.params;
   try {
@@ -48,5 +76,6 @@ exports.joinSession = async (req, res, next) => {
     next(error);
   }
 };
+
 // session id 62c302925b49abb902fc776e
 // user id 62c44c7cc5d2f07a6ba7088a
