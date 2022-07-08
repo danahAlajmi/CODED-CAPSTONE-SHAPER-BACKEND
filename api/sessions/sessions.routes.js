@@ -5,6 +5,7 @@ const {
   fetchSession,
   getSessions,
   createSession,
+  joinSession,
 } = require("./sessions.controllers");
 
 router.param("sessionId", async (req, res, next, sessionId) => {
@@ -21,4 +22,6 @@ router.param("sessionId", async (req, res, next, sessionId) => {
 
 router.get("/", getSessions);
 router.post("/create", createSession);
+router.post("/:sessionId/user/:userId", joinSession);
+
 module.exports = router;
