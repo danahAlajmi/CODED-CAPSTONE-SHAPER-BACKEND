@@ -58,8 +58,25 @@ exports.deleteSession = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-}
+};
+exports.canceleSession = async (req, res, next) => {
+  const { userId } = req.params;
+  try {
+    await User.findByIdAndUpdate(userId, {
+      $pull: { enrolled: req.session.id },
+      new: true,
+    });
 
+    const canceleSession = await Session.findByIdAndUpdate(req.session.id, {
+      $pull: { participants: userId },
+      new: true,
+    });
+
+    res.status(200).json(canceleSession);
+  } catch (error) {
+    next(error);
+  }
+};
 exports.joinSession = async (req, res, next) => {
   const { userId } = req.params;
   try {
