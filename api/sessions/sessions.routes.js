@@ -8,7 +8,7 @@ const {
   joinSession,
   updateSession,
   deleteSession,
-  canceleSession,
+  cancelSession,
 } = require("./sessions.controllers");
 
 router.param("sessionId", async (req, res, next, sessionId) => {
@@ -28,6 +28,6 @@ router.post("/create", createSession);
 router.put("/update/:sessionId", updateSession);
 router.post("/:sessionId/user/:userId", joinSession);
 router.delete("/delete/:sessionId", deleteSession);
-router.post("/cancele/:sessionId/:userId", canceleSession);
+router.post("/cancel/:sessionId/:userId", cancelSession);
 
 module.exports = router;

@@ -59,7 +59,7 @@ exports.deleteSession = async (req, res, next) => {
     next(error);
   }
 };
-exports.canceleSession = async (req, res, next) => {
+exports.cancelSession = async (req, res, next) => {
   const { userId } = req.params;
   try {
     await User.findByIdAndUpdate(userId, {
@@ -67,12 +67,12 @@ exports.canceleSession = async (req, res, next) => {
       new: true,
     });
 
-    const canceleSession = await Session.findByIdAndUpdate(req.session.id, {
+    const cancelSession = await Session.findByIdAndUpdate(req.session.id, {
       $pull: { participants: userId },
       new: true,
     });
 
-    res.status(200).json(canceleSession);
+    res.status(200).json(cancelSession);
   } catch (error) {
     next(error);
   }
