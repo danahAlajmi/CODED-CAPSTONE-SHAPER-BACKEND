@@ -1,4 +1,3 @@
-
 const Session = require("../../models/Session");
 const User = require("../../models/User");
 const Profile = require("../../models/Profile");
@@ -33,6 +32,8 @@ exports.signin = async (req, res) => {
       email: foundUser.email,
       isTrainer: foundUser.isTrainer,
       profile: foundUser.profile,
+      enrolled: foundUser.enrolled,
+      owner: foundUser.owner,
     };
     const token = jwt.sign(payload, process.env.JWT_SECRET);
 
@@ -49,7 +50,7 @@ exports.signup = async (req, res) => {
     const newUser = await User.create(req.body);
     const newProfile = await Profile.create({ user: newUser._id });
     await User.findByIdAndUpdate(newUser._id, { profile: newProfile._id });
-    
+
     const payload = {
       _id: newUser._id,
       username: newUser.username,
@@ -57,10 +58,9 @@ exports.signup = async (req, res) => {
       isTrainer: newUser.isTrainer,
       profile: newProfile._id,
     };
-    
+
     const token = jwt.sign(payload, process.env.JWT_SECRET);
-    
-    
+
     res.json({ token: token });
   } catch (err) {
     res.status(500).json("Server Error");
