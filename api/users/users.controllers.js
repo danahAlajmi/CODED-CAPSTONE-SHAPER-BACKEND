@@ -7,7 +7,7 @@ const jwt = require("jsonwebtoken");
 
 exports.getUsers = async (req, res, next) => {
   try {
-    const users = await User.find().populate("profile");
+    const users = await User.find({},{password: 0}).populate("profile");
     res.json(users);
   } catch (err) {
     next(err);
