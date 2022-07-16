@@ -5,9 +5,12 @@ const Profile = require("../../models/Profile");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+const xlsx = require("xlsx");
+const path = require("path");
+
 exports.getUsers = async (req, res, next) => {
   try {
-    const users = await User.find({},{password: 0}).populate("profile");
+    const users = await User.find({}, { password: 0 }).populate("profile");
     res.json(users);
   } catch (err) {
     next(err);
@@ -64,5 +67,52 @@ exports.signup = async (req, res) => {
     res.json({ token: token });
   } catch (err) {
     res.status(500).json("Server Error");
+  }
+};
+
+exports.getReport = async (req, res, next) => {
+  try {
+    const sessions = await Session.find(
+      { participants: req.body._id },
+      { _id: 0, image: 0, location: 0, participants: 0, __v: 0, limit: 0 }
+    ).populate("trainer");
+    // begin
+
+    const workSheetColumnName = [
+      "Title",
+      "Description",
+      "Date",
+      "Duration",
+      "Trainer",
+    ];
+
+    const workSheetName = "Sessions";
+    const filePath = `./reports/sessions-${
+      Date.now() + "-" + req.body._id
+    }.xlsx`;
+    const data = sessions.map((session) => {
+      return [
+        session.title,
+        session.description,
+        new Date(session.date).toLocaleDateString() +
+          " " +
+          new Date(session.date).toLocaleString("en-US", {
+            hour: "numeric",
+            minute: "numeric",
+            hour12: true,
+          }),
+        session.duration,
+        session.trainer.username,
+      ];
+    });
+    const workBook = xlsx.utils.book_new();
+    const workSheetData = [workSheetColumnName, ...data];
+    const workSheet = xlsx.utils.aoa_to_sheet(workSheetData);
+    xlsx.utils.book_append_sheet(workBook, workSheet, workSheetName);
+    xlsx.writeFile(workBook, path.resolve(filePath));
+
+    res.json(sessions);
+  } catch (err) {
+    next(err);
   }
 };
