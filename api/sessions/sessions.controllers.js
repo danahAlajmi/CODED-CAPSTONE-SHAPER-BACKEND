@@ -13,7 +13,7 @@ exports.fetchSession = async (sessionId, next) => {
 
 exports.getSessions = async (req, res, next) => {
   try {
-    const sessions = await Session.find();
+    const sessions = await Session.find().sort({ date: 1 });
     res.json(sessions);
   } catch (err) {
     next(err);
