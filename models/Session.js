@@ -12,10 +12,10 @@ const SessionSchema = new mongoose.Schema({
 
   date: { type: Number, required: true },
 
-  location: { type: String },
+  location: { type: String, default: "29.358,47.906" },
   duration: { type: Number, required: true },
   limit: { type: Number, required: true },
-
+  isOnline: { type: Boolean, required: true, default: false },
   participants: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   trainer: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 });
