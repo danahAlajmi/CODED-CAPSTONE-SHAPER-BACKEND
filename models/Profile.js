@@ -9,6 +9,7 @@ const ProfileSchema = new mongoose.Schema({
   },
   firstName: { type: String, default: "" },
   lastName: { type: String, default: "" },
+  zoomLink: { type: String, default: "" },
   user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 });
 
